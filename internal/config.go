@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"os"
 
 	"gopkg.in/yaml.v3"
@@ -15,12 +14,8 @@ type Config struct {
 }
 
 func loadConfig(filename string) *Config {
-	file, err := os.Open(filename)
+	bytes, err := os.ReadFile(filename)
 	check(err, fmt.Sprintf("Failed to open %s config", filename))
-	defer file.Close()
-
-	bytes, err := io.ReadAll(file)
-	check(err, "Failed to convert files to bytes")
 
 	var config Config
 	err = yaml.Unmarshal(bytes, &config)
